@@ -21,10 +21,10 @@ export default makeStyles(theme => ({
     zIndex: 1,
     display: 'flex',
     top: '2em',
-    margin: '2em auto auto',
+    margin: '2em 1em auto',
     
     '& div:first-child': {
-      opacity: '.5',
+      opacity: '.9',
       transition: 'opacity ease 1.5s',
       marginRight: '1em',
   
@@ -104,10 +104,10 @@ export default makeStyles(theme => ({
 
 
   cardButton: {
-    paddingTop: 0,
-    paddingBottom: 0,
+    padding: '0 0.5em',
     borderRadius: '10px',
     height: '2.5em',
+    fontSize: '0.85em',
     boxShadow: '0px 6px 17px 6px #263dd470',
     
     '&:active': {
@@ -158,21 +158,21 @@ export default makeStyles(theme => ({
 
   card: {
     zIndex: 1101,
-    margin: 'auto 1em 5em',
+    margin: 'auto 1em 4.5em',
     display: 'flex',
     alignItems: 'center',
     
     '& img': {
       position: 'absolute',
       borderRadius: '5px',
-      width: '10em',
+      width: '7em',
       zIndex: 1
     }
   },
   
   cardBody: {
     boxShadow: '0 0 20px 5px rgba(128, 128, 128, 0.5)',
-    padding: '1.5em 1.5em 1.5em 10em',
+    padding: '.5em 1em .5em 6em',
     borderRadius: '5px',
     backgroundColor: theme.colors.white,
     marginLeft: '2em',

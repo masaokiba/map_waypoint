@@ -99,11 +99,12 @@ function Login(props) {
     })
     nonGeodesicPolyline.setMap(map.current);
 
-    const bounds = new maps.current.LatLngBounds();
-    for (let spot of path) {
-      bounds.extend(new maps.current.LatLng(spot.lat, spot.lng))
-    }
-    map.current.fitBounds(bounds)
+    // const bounds = new maps.current.LatLngBounds();
+    // for (let spot of path) {
+    //   bounds.extend(new maps.current.LatLng(spot.lat, spot.lng))
+    // }
+    // console.log(bounds);
+    // map.current.fitBounds(bounds)
   }
 
   if (map.current && maps.current) {
@@ -112,7 +113,7 @@ function Login(props) {
   
   return (
     <Box className={classes.screen}>
-      <Snackbar
+      {/* <Snackbar
         variant={ pathStatus === pathStatusValue.FINISHED ? 'success' : 'info' } 
         className={classes.snackbar}
         message={'Click inside the map and start putting path'
@@ -120,7 +121,7 @@ function Login(props) {
             // : pathStatus === pathStatusValue.DOING ? 'Click with Ctrl key to put your last point and finalize your path'
             // : 'Finished. Click inside the map to start another'
         }
-      />
+      /> */}
       <Box className={classes.mapToolBar}>
         <MapToolBar/>
         <div>

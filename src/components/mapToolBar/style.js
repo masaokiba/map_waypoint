@@ -4,8 +4,7 @@ export default makeStyles(theme => ({
   root: {
     padding: '2px 4px',
     display: 'flex',
-    alignItems: 'center',
-    width: 400,
+    alignItems: 'center'
   },
   input: {
     marginLeft: 8,
