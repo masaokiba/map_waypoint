@@ -189,9 +189,14 @@ export default makeStyles(theme => ({
     height: '1.5rem',
     color: 'white',
     transform: 'translate(-50%, -50%)',
+    cursor: 'pointer',
 
     '&.active': {
       backgroundColor: theme.palette.error.main,
+    },
+
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main
     }
   }
 }));

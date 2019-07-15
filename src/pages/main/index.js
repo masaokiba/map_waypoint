@@ -54,9 +54,10 @@ function Login(props) {
   const [tab, setTab] = useState(0);
   const initState = {
     pathStatus: pathStatusValue.INIT,
+    active: 0,
     path: []
   }
-  const [{ pathStatus, path }, dispatch] = useReducer(reducer, initState);
+  const [{ pathStatus, path, active }, dispatch] = useReducer(reducer, initState);
   const map = useRef(null);
   const maps = useRef(null);
 
@@ -77,6 +78,11 @@ function Login(props) {
       });
     }
 
+    dispatch(action);
+  }
+
+  const handleMarkerClick = key => {
+    const action = anyAction({ active: parseInt(key) });
     dispatch(action);
   }
 
@@ -110,7 +116,7 @@ function Login(props) {
   if (map.current && maps.current) {
     renderPolylines();
   }
-  
+
   return (
     <Box className={classes.screen}>
       {/* <Snackbar
@@ -135,13 +141,14 @@ function Login(props) {
           bootstrapURLKeys={{ key: 'AIzaSyABQ8h9v6a5SaqoEo7VbzTZaWtvo5J0Hi8' }}
           defaultCenter={{lat: 50, lng: 5}}
           onClick={handleMapClick}
+          onChildClick={handleMarkerClick}
           onGoogleApiLoaded={info => { map.current = info.map; maps.current = info.maps; }}
           defaultZoom={7}
         >
           {path.map(({ lat, lng }, key) => (
             <Marker
               key={key}
-              active={key === 0}
+              active={key === active}
               text={key + 1}
               lat={lat}
               lng={lng}
