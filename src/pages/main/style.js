@@ -91,7 +91,8 @@ export default makeStyles(theme => ({
     backgroundColor: theme.palette.secondary.main,
     width: '10px',
     height: '6px',
-    borderRadius: '4px'
+    borderRadius: '4px',
+    transition: 'all ease .5s'
   },
 
   spot: {
@@ -99,7 +100,8 @@ export default makeStyles(theme => ({
     opacity: '.5',
     width: '6px',
     height: '6px',
-    borderRadius: '50%'
+    borderRadius: '50%',
+    transition: 'all ease .5s'
   },
 
 

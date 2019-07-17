@@ -22,6 +22,11 @@ import PersonPinIcon from '@material-ui/icons/PersonPin';
 import MapToolBar from 'components/mapToolBar';
 import Snackbar from 'components/snackbar';
 
+import get from 'lodash/get';
+import sumBy from 'lodash/sumBy';
+import 'api/mock'
+import axios from 'axios';
+
 import cardImage from 'image.png';
 import { ReactComponent as WalkingIcon } from 'person-walking.svg';
 
@@ -49,15 +54,16 @@ function Marker(props) {
   )
 }
 
-function Login(props) {
+function Main(props) {
   const classes = useStyles();
   const [tab, setTab] = useState(0);
   const initState = {
     pathStatus: pathStatusValue.INIT,
     active: 0,
-    path: []
+    path: [],
+    info: []
   }
-  const [{ pathStatus, path, active }, dispatch] = useReducer(reducer, initState);
+  const [{ pathStatus, path, active, info }, dispatch] = useReducer(reducer, initState);
   const map = useRef(null);
   const maps = useRef(null);
 
@@ -67,17 +73,33 @@ function Login(props) {
     let action = null;
 
     if (pathStatus === pathStatusValue.DOING) {
-      action = anyAction({
-        // pathStatus: event.ctrlKey ? pathStatusValue.FINISHED : pathStatusValue.DOING,
-        path: path.concat({lat, lng})
+      action = anyAction({ path: path.concat({lat, lng}) })
+      
+      axios.get('https://maps.googleapis.com/maps/api/directions/json', { 
+        params: {
+          origin: `${lat},${lng}`,
+          destination: `${lat},${lng}`,
+          key: process.env.REACT_APP_GOOGLE_MAP_API_KEY
+        }
+      })
+      .then(function ({ data }) {
+        const leg = get(data, 'routes[0].legs[0]');
+        const distance = get(leg, 'distance.value');
+        const duration = get(leg, 'duration.value');
+        
+        action = anyAction({
+          // pathStatus: event.ctrlKey ? pathStatusValue.FINISHED : pathStatusValue.DOING,
+          info: info.concat({ distance, duration })
+        });
+        dispatch(action);
       });
+
     } else {
       action = anyAction({
         pathStatus: pathStatusValue.DOING,
         path: [{ lat, lng}]
       });
     }
-
     dispatch(action);
   }
 
@@ -117,6 +139,9 @@ function Login(props) {
     renderPolylines();
   }
 
+  const totalDuration = sumBy(info, 'duration');
+  const totalDistance = sumBy(info, 'distance');
+  
   return (
     <Box className={classes.screen}>
       {/* <Snackbar
@@ -138,7 +163,7 @@ function Login(props) {
       </Box>
       <Box className={classes.map}>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyABQ8h9v6a5SaqoEo7VbzTZaWtvo5J0Hi8' }}
+          bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
           defaultCenter={{lat: 50, lng: 5}}
           onClick={handleMapClick}
           onChildClick={handleMarkerClick}
@@ -178,18 +203,18 @@ function Login(props) {
               <Box className={classes.cardInfoMeta}>
                 <WalkingIcon/>
                 <div>
-                  <Typography className={classes.distanceMajor}>3h 20min</Typography>
-                  <Typography className={classes.distanceMinor}>5.3km</Typography>
+                  <Typography className={classes.distanceMajor}>
+                    {`${Math.floor(totalDuration / 60)}h ${totalDuration % 60}min`}
+                  </Typography>
+                  <Typography className={classes.distanceMinor}>
+                    {`${totalDistance}km`}
+                  </Typography>
                 </div>
               </Box>
               <Box className={classes.spotGroup}>
-                <div className={classes.spotActive}/>
-                <div className={classes.spot}/>
-                <div className={classes.spot}/>
-                <div className={classes.spot}/>
-                <div className={classes.spot}/>
-                <div className={classes.spot}/>
-                <div className={classes.spot}/>
+                {path.map((item, key) => (
+                  <div key={key} className={active === key ? classes.spotActive : classes.spot}/>
+                ))}
               </Box>
             </div>
             <Button
@@ -223,4 +248,4 @@ function Login(props) {
   )
 }
 
-export default React.memo(Login);
+export default React.memo(Main);
